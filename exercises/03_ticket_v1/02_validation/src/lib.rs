@@ -1,3 +1,5 @@
+use std::os::linux::raw::stat;
+
 struct Ticket {
     title: String,
     description: String,
@@ -17,7 +19,21 @@ impl Ticket {
     // as well as some `String` methods. Use the documentation of Rust's standard library
     // to find the most appropriate options -> https://doc.rust-lang.org/std/string/struct.String.html
     fn new(title: String, description: String, status: String) -> Self {
-        todo!();
+
+        // - Only `To-Do`, `In Progress`, and `Done` statuses are allowed
+        if !(status.contains("To-Do") || status.contains("In Progress") || status.contains("Done")) {
+            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+        }
+
+        // - The `title` and `description` fields should not be empty.
+        assert!(!title.is_empty(), "Title cannot be empty");
+        assert!(!description.is_empty(), "Description cannot be empty");
+
+
+        assert!(title.len() <= 50, "Title cannot be longer than 50 characters");
+        assert!(description.len() <= 500, "Description cannot be longer than 500 characters");
+
+
         Self {
             title,
             description,
