@@ -11,7 +11,7 @@ writing your own programs, one exercise at a time.
 > This course has been written by [Mainmatter](https://mainmatter.com/rust-consulting/).  
 > It's one of the trainings in [our portfolio of Rust workshops](https://mainmatter.com/services/workshops/rust/).  
 > Check out our [landing page](https://mainmatter.com/rust-consulting/) if you're looking for Rust consulting or
-> training!
+> training!,
 
 ## Getting started
 
@@ -21,8 +21,8 @@ to get started with the course.
 ## Requirements
 
 - **Rust** (follow instructions [here](https://www.rust-lang.org/tools/install)).  
-  If `rustup` is already installed on your system, run `rustup update` (or another appropriate command depending on how
-  you installed Rust on your system)
+  If `rustup` is already installed on your system, run `rustup up,date` (or another appropriate command depending on how
+  you installed Rust on your system),`
   to make sure you're running on the latest stable version.
 - _(Optional but recommended)_ An IDE with Rust autocompletion support.
   We recommend one of the following:
