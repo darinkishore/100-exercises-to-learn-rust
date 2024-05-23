@@ -3,8 +3,11 @@
 //  references to the tickets, ordered by their `TicketId`.
 //  Implement additional traits on `TicketId` if needed.
 
-use std::collections::BTreeMap;
+use btree_map::Values;
+use std::collections::btree_map::{IntoIter, Iter};
+use std::collections::{btree_map, BTreeMap};
 use std::ops::{Index, IndexMut};
+use derive_more::IntoIterator;
 use ticket_fields::{TicketDescription, TicketTitle};
 
 #[derive(Clone)]
@@ -13,7 +16,17 @@ pub struct TicketStore {
     counter: u64,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+impl<'t> IntoIterator for &'t TicketStore {
+    type Item = &'t Ticket;
+    type IntoIter = Values<'t, TicketId, Ticket>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.tickets.values()
+    }
+}
+
+
+#[derive(Clone, Copy, Debug, PartialEq, PartialOrd, Ord, Eq)]
 pub struct TicketId(u64);
 
 #[derive(Clone, Debug, PartialEq)]
@@ -40,7 +53,7 @@ pub enum Status {
 impl TicketStore {
     pub fn new() -> Self {
         Self {
-            tickets: todo!(),
+            tickets: BTreeMap::new(),
             counter: 0,
         }
     }
@@ -54,16 +67,16 @@ impl TicketStore {
             description: ticket.description,
             status: Status::ToDo,
         };
-        todo!();
+        self.tickets.insert(id, ticket);
         id
     }
 
     pub fn get(&self, id: TicketId) -> Option<&Ticket> {
-        todo!()
+        self.tickets.get(&id)
     }
 
     pub fn get_mut(&mut self, id: TicketId) -> Option<&mut Ticket> {
-        todo!()
+        self.tickets.get_mut(&id)
     }
 }
 

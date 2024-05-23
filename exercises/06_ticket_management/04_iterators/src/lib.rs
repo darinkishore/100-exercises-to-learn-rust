@@ -1,3 +1,5 @@
+use std::path::Iter;
+use std::vec::IntoIter;
 use ticket_fields::{TicketDescription, TicketTitle};
 
 // TODO: Let's start sketching our ticket store!
@@ -22,6 +24,15 @@ pub enum Status {
     ToDo,
     InProgress,
     Done,
+}
+
+impl IntoIterator for TicketStore {
+    type Item = Ticket;
+    type IntoIter = IntoIter<Ticket>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.tickets.into_iter()
+    }
 }
 
 impl TicketStore {

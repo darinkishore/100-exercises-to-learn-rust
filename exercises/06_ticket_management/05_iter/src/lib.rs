@@ -1,7 +1,8 @@
+use derive_more::IntoIterator;
 use ticket_fields::{TicketDescription, TicketTitle};
 
 // TODO: Provide an `iter` method that returns an iterator over `&Ticket` items.
-#[derive(Clone)]
+#[derive(Clone, IntoIterator)]
 pub struct TicketStore {
     tickets: Vec<Ticket>,
 }
@@ -26,6 +27,11 @@ impl TicketStore {
             tickets: Vec::new(),
         }
     }
+
+    pub fn iter(&self) -> impl Iterator<Item=&Ticket> {
+        self.tickets.iter()
+    }
+
 
     pub fn add_ticket(&mut self, ticket: Ticket) {
         self.tickets.push(ticket);
