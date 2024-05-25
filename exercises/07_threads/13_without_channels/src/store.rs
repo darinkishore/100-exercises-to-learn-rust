@@ -3,12 +3,12 @@ use std::sync::{Arc, RwLock};
 
 use crate::data::{Status, Ticket, TicketDraft};
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub struct TicketId(u64);
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord,)]
+pub struct TicketId(u64,);
 
-#[derive(Clone)]
+#[derive(Clone,)]
 pub struct TicketStore {
-    tickets: BTreeMap<TicketId, Arc<RwLock<Ticket>>>,
+    tickets: BTreeMap<TicketId, Arc<RwLock<Ticket,>,>,>,
     counter: u64,
 }
 
@@ -20,8 +20,11 @@ impl TicketStore {
         }
     }
 
-    pub fn add_ticket(&mut self, ticket: TicketDraft) -> TicketId {
-        let id = TicketId(self.counter);
+    pub fn add_ticket(
+        &mut self,
+        ticket: TicketDraft,
+    ) -> TicketId {
+        let id = TicketId(self.counter,);
         self.counter += 1;
         let ticket = Ticket {
             id,
@@ -29,12 +32,15 @@ impl TicketStore {
             description: ticket.description,
             status: Status::ToDo,
         };
-        let ticket = Arc::new(RwLock::new(ticket));
-        self.tickets.insert(id, ticket);
+        let ticket = Arc::new(RwLock::new(ticket,),);
+        self.tickets.insert(id, ticket,);
         id
     }
 
-    pub fn get(&self, id: TicketId) -> Option<Arc<RwLock<Ticket>>> {
-        self.tickets.get(&id).cloned()
+    pub fn get(
+        &self,
+        id: TicketId,
+    ) -> Option<Arc<RwLock<Ticket,>,>,> {
+        self.tickets.get(&id,).cloned()
     }
 }

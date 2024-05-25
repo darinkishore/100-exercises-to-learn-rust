@@ -1,12 +1,13 @@
-use crate::data::{Status, Ticket, TicketDraft};
 use std::collections::BTreeMap;
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
+use crate::data::{Status, Ticket, TicketDraft, TicketPatch};
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, )]
 pub struct TicketId(u64);
 
-#[derive(Clone)]
+#[derive(Clone, )]
 pub struct TicketStore {
-    tickets: BTreeMap<TicketId, Ticket>,
+    tickets: BTreeMap<TicketId, Ticket, >,
     counter: u64,
 }
 
@@ -18,7 +19,10 @@ impl TicketStore {
         }
     }
 
-    pub fn add_ticket(&mut self, ticket: TicketDraft) -> TicketId {
+    pub fn add_ticket(
+        &mut self,
+        ticket: TicketDraft,
+    ) -> TicketId {
         let id = TicketId(self.counter);
         self.counter += 1;
         let ticket = Ticket {
@@ -31,11 +35,31 @@ impl TicketStore {
         id
     }
 
-    pub fn get(&self, id: TicketId) -> Option<&Ticket> {
+    pub fn get(
+        &self,
+        id: TicketId,
+    ) -> Option<&Ticket, > {
         self.tickets.get(&id)
     }
 
-    pub fn get_mut(&mut self, id: TicketId) -> Option<&mut Ticket> {
+    pub fn get_mut(
+        &mut self,
+        id: TicketId,
+    ) -> Option<&mut Ticket, > {
         self.tickets.get_mut(&id)
+    }
+
+    pub fn update(&mut self, id: TicketId, patch: TicketPatch) {
+        let ticket: &mut Ticket = self.get_mut(id).unwrap();
+
+        if let Some(title) = patch.title {
+            ticket.title = title;
+        }
+        if let Some(description) = patch.description {
+            ticket.description = description;
+        }
+        if let Some(status) = patch.status {
+            ticket.status = status;
+        }
     }
 }

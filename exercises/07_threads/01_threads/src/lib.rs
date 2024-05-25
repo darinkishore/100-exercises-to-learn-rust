@@ -1,3 +1,4 @@
+#![feature(slice_as_chunks)]
 // TODO: implement a multi-threaded version of the `sum` function
 //  using `spawn` and `join`.
 //  Given a vector of integers, split the vector into two halves and
@@ -14,8 +15,20 @@
 // this is necessary in the next exercise.
 use std::thread;
 
-pub fn sum(v: Vec<i32>) -> i32 {
-    todo!()
+pub fn sum(v: Vec<i32,>,) -> i32 {
+    let mid = v.len() / 2;
+
+    let first_half = v[..mid].to_vec();
+    let second_half = v[mid..].to_vec();
+
+    let handle = thread::spawn
+        (move || -> i32 { first_half.iter().sum() },);
+    let second_handle =
+        thread::spawn(move || -> i32 { second_half.iter().sum() },);
+
+    let first_result: i32 = handle.join().unwrap();
+    let second_result: i32 = second_handle.join().unwrap();
+    first_result + second_result
 }
 
 #[cfg(test)]

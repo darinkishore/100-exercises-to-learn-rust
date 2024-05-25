@@ -5,8 +5,16 @@
 
 use std::thread;
 
-pub fn sum(v: Vec<i32>) -> i32 {
-    todo!()
+pub fn sum(v: Vec<i32,>,) -> i32 {
+    let static_ref: &'static mut [i32] = Vec::leak(v,);
+
+    let (first_half, second_half,) =
+        &static_ref.split_at(&static_ref.len() / 2,);
+
+    let handle = thread::spawn(|| -> i32 { first_half.iter().sum() },);
+    let second_handle = thread::spawn(|| -> i32 { second_half.iter().sum() },);
+
+    handle.join().unwrap() + second_handle.join().unwrap()
 }
 
 #[cfg(test)]

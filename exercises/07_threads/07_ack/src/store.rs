@@ -1,12 +1,13 @@
-use crate::data::{Status, Ticket, TicketDraft};
 use std::collections::BTreeMap;
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub struct TicketId(u64);
+use crate::data::{Status, Ticket, TicketDraft};
 
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord,)]
+pub struct TicketId(u64,);
+
+#[derive(Clone,)]
 pub struct TicketStore {
-    tickets: BTreeMap<TicketId, Ticket>,
+    tickets: BTreeMap<TicketId, Ticket,>,
     counter: u64,
 }
 
@@ -18,20 +19,26 @@ impl TicketStore {
         }
     }
 
-    pub fn add_ticket(&mut self, ticket: TicketDraft) -> TicketId {
-        let id = TicketId(self.counter);
+    pub fn add_ticket(
+        &mut self,
+        ticket: TicketDraft,
+    ) -> TicketId {
+        let id = TicketId(self.counter,);
         self.counter += 1;
         let ticket = Ticket {
             id,
-            title: ticket.title,
-            description: ticket.description,
+            title: ticket.title.clone(),
+            description: ticket.description.clone(),
             status: Status::ToDo,
         };
-        self.tickets.insert(id, ticket);
+        self.tickets.insert(id, ticket,);
         id
     }
 
-    pub fn get(&self, id: TicketId) -> Option<&Ticket> {
-        self.tickets.get(&id)
+    pub fn get(
+        &self,
+        id: TicketId,
+    ) -> Option<&Ticket,> {
+        self.tickets.get(&id,)
     }
 }
