@@ -6,7 +6,11 @@ pub mod ticket {
     }
 
     impl Ticket {
-        pub fn new(title: String, description: String, status: String) -> Ticket {
+        pub fn new(
+            title: String,
+            description: String,
+            status: String,
+        ) -> Ticket {
             if title.is_empty() {
                 panic!("Title cannot be empty");
             }
@@ -19,7 +23,8 @@ pub mod ticket {
             if description.len() > 500 {
                 panic!("Description cannot be longer than 500 characters");
             }
-            if status != "To-Do" && status != "In Progress" && status != "Done" {
+            if status != "To-Do" && status != "In Progress" && status != "Done"
+            {
                 panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
             }
 
@@ -30,17 +35,11 @@ pub mod ticket {
             }
         }
 
-        pub fn title(self) -> String {
-            self.title
-        }
+        pub fn title(self,) -> String { self.title }
 
-        pub fn description(self) -> String {
-            self.description
-        }
+        pub fn description(self,) -> String { self.description }
 
-        pub fn status(self) -> String {
-            self.status
-        }
+        pub fn status(self,) -> String { self.status }
 
         // TODO: Add three public methods to the `Ticket` struct:
         //  - `title` that returns the `title` field.
@@ -55,19 +54,31 @@ mod tests {
 
     #[test]
     fn description() {
-        let ticket = Ticket::new("A title".into(), "A description".into(), "To-Do".into());
+        let ticket = Ticket::new(
+            "A title".into(),
+            "A description".into(),
+            "To-Do".into(),
+        );
         assert_eq!(ticket.description(), "A description");
     }
 
     #[test]
     fn title() {
-        let ticket = Ticket::new("A title".into(), "A description".into(), "To-Do".into());
+        let ticket = Ticket::new(
+            "A title".into(),
+            "A description".into(),
+            "To-Do".into(),
+        );
         assert_eq!(ticket.title(), "A title");
     }
 
     #[test]
     fn status() {
-        let ticket = Ticket::new("A title".into(), "A description".into(), "To-Do".into());
+        let ticket = Ticket::new(
+            "A title".into(),
+            "A description".into(),
+            "To-Do".into(),
+        );
         assert_eq!(ticket.status(), "To-Do");
     }
 }

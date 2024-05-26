@@ -2,8 +2,8 @@
 // - `price`, an unsigned integer
 // - `quantity`, an unsigned integer
 //
-// It should also have a method named `is_available` that returns a `true` if the quantity is
-// greater than 0, otherwise `false`.
+// It should also have a method named `is_available` that returns a `true` if
+// the quantity is greater than 0, otherwise `false`.
 
 struct Order {
     price: u32,
@@ -11,9 +11,7 @@ struct Order {
 }
 
 impl Order {
-    fn is_available(self) -> bool {
-        self.quantity > 0
-    }
+    fn is_available(self,) -> bool { self.quantity > 0 }
 }
 
 #[cfg(test)]

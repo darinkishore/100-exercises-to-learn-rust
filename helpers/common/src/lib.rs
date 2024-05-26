@@ -6,10 +6,6 @@ pub fn overly_long_title() -> String {
     "A title that's definitely longer than what should be allowed in a development ticket".into()
 }
 
-pub fn valid_title() -> String {
-    "A title".into()
-}
+pub fn valid_title() -> String { "A title".into() }
 
-pub fn valid_description() -> String {
-    "A description".into()
-}
+pub fn valid_description() -> String { "A description".into() }

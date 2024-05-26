@@ -1,14 +1,15 @@
 enum Shape {
-    Circle { radius: f64 },
-    Square { border: f64 },
-    Rectangle { width: f64, height: f64 },
+    Circle { radius: f64, },
+    Square { border: f64, },
+    Rectangle { width: f64, height: f64, },
 }
 
 impl Shape {
     // TODO: Implement the `radius` method using
     //  either an `if let` or a `let/else`.
-    pub fn radius(&self) -> f64 {
-        let Shape::Circle { radius } = &self else {
+    pub fn radius(&self,) -> f64 {
+        let Shape::Circle { radius, } = &self
+        else {
             panic!("What the fuck?")
         };
         *radius
@@ -20,15 +21,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_circle() {
-        let _ = Shape::Circle { radius: 1.0 }.radius();
-    }
+    fn test_circle() { let _ = Shape::Circle { radius: 1.0, }.radius(); }
 
     #[test]
     #[should_panic]
-    fn test_square() {
-        let _ = Shape::Square { border: 1.0 }.radius();
-    }
+    fn test_square() { let _ = Shape::Square { border: 1.0, }.radius(); }
 
     #[test]
     #[should_panic]
@@ -37,6 +34,6 @@ mod tests {
             width: 1.0,
             height: 2.0,
         }
-            .radius();
+        .radius();
     }
 }

@@ -1,16 +1,17 @@
 // TODO: use `Status` as type for `Ticket::status`
 //   Adjust the signature and implementation of all other methods as necessary.
 
-#[derive(Debug, PartialEq)]
-// `derive`s are recursive: it can only derive `PartialEq` if all fields also implement `PartialEq`.
-// Same holds for `Debug`. Do what you must with `Status` to make this work.
+#[derive(Debug, PartialEq,)]
+// `derive`s are recursive: it can only derive `PartialEq` if all fields also
+// implement `PartialEq`. Same holds for `Debug`. Do what you must with `Status`
+// to make this work.
 struct Ticket {
     title: String,
     description: String,
     status: Status,
 }
 
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Debug, PartialEq, Clone, Copy,)]
 enum Status {
     ToDo,
     InProgress,
@@ -18,7 +19,11 @@ enum Status {
 }
 
 impl Ticket {
-    pub fn new(title: String, description: String, status: Status) -> Ticket {
+    pub fn new(
+        title: String,
+        description: String,
+        status: Status,
+    ) -> Ticket {
         if title.is_empty() {
             panic!("Title cannot be empty");
         }
@@ -39,23 +44,18 @@ impl Ticket {
         }
     }
 
-    pub fn title(&self) -> &String {
-        &self.title
-    }
+    pub fn title(&self,) -> &String { &self.title }
 
-    pub fn description(&self) -> &String {
-        &self.description
-    }
+    pub fn description(&self,) -> &String { &self.description }
 
-    pub fn status(&self) -> &Status {
-        &self.status
-    }
+    pub fn status(&self,) -> &Status { &self.status }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use common::{valid_description, valid_title};
+
+    use super::*;
 
     #[test]
     fn test_partial_eq() {

@@ -1,28 +1,29 @@
-// TODO: Implement the `to_dos` method. It must return a `Vec` of references to the tickets
-//  in `TicketStore` with status set to `Status::ToDo`.
+// TODO: Implement the `to_dos` method. It must return a `Vec` of references to
+// the tickets  in `TicketStore` with status set to `Status::ToDo`.
 use ticket_fields::{TicketDescription, TicketTitle};
 
-#[derive(Clone)]
+#[derive(Clone,)]
 pub struct TicketStore {
-    tickets: Vec<Ticket>,
+    tickets: Vec<Ticket,>,
 }
 
 impl TicketStore {
-    pub fn to_dos(&self) -> Vec<&Ticket> {
-        self.tickets.iter()
-            .filter(|t| t.status == Status::ToDo)
+    pub fn to_dos(&self,) -> Vec<&Ticket,> {
+        self.tickets
+            .iter()
+            .filter(|t| t.status == Status::ToDo,)
             .collect()
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq,)]
 pub struct Ticket {
     pub title: TicketTitle,
     pub description: TicketDescription,
     pub status: Status,
 }
 
-#[derive(Clone, Debug, Copy, PartialEq)]
+#[derive(Clone, Debug, Copy, PartialEq,)]
 pub enum Status {
     ToDo,
     InProgress,
@@ -36,15 +37,19 @@ impl TicketStore {
         }
     }
 
-    pub fn add_ticket(&mut self, ticket: Ticket) {
-        self.tickets.push(ticket);
+    pub fn add_ticket(
+        &mut self,
+        ticket: Ticket,
+    ) {
+        self.tickets.push(ticket,);
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use ticket_fields::test_helpers::{ticket_description, ticket_title};
+
+    use super::*;
 
     #[test]
     fn todos() {
@@ -55,16 +60,16 @@ mod tests {
             description: ticket_description(),
             status: Status::ToDo,
         };
-        store.add_ticket(todo.clone());
+        store.add_ticket(todo.clone(),);
 
         let ticket = Ticket {
             title: ticket_title(),
             description: ticket_description(),
             status: Status::InProgress,
         };
-        store.add_ticket(ticket);
+        store.add_ticket(ticket,);
 
-        let todos: Vec<&Ticket> = store.to_dos();
+        let todos: Vec<&Ticket,> = store.to_dos();
         assert_eq!(todos.len(), 1);
         assert_eq!(todos[0], &todo);
     }

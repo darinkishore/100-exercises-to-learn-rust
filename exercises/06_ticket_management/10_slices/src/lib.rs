@@ -1,11 +1,7 @@
-// TODO: Define a function named `sum` that takes a reference to a slice of `u32` and returns the sum of all
-//  elements in the slice.
+// TODO: Define a function named `sum` that takes a reference to a slice of
+// `u32` and returns the sum of all  elements in the slice.
 
-fn sum(nums: &[u32]) -> u32 {
-    nums
-        .iter()
-        .sum()
-}
+fn sum(nums: &[u32],) -> u32 { nums.iter().sum() }
 
 #[cfg(test)]
 mod tests {
@@ -31,7 +27,7 @@ mod tests {
 
     #[test]
     fn array_slice() {
-        let v = [1, 2, 3, 4, 5];
+        let v = [1, 2, 3, 4, 5,];
         assert_eq!(sum(&v), 15);
     }
 }

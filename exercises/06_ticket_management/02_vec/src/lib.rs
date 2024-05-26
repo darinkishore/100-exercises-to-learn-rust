@@ -12,19 +12,17 @@
 // `fibonacci(2)` to return `1`, and so on.
 
 struct FibMemo {
-    memo: Vec<u32>,
+    memo: Vec<u32,>,
 }
 
-pub fn fibonacci(n: u32) -> u32 {
-    let mut memo = FibMemo {
-        memo: vec![0, 1],
-    };
+pub fn fibonacci(n: u32,) -> u32 {
+    let mut memo = FibMemo { memo: vec![0, 1], };
     for i in 2..=n {
-        memo.memo.push(memo.memo[(i - 1) as usize] + memo.memo[(i - 2) as usize]);
+        memo.memo
+            .push(memo.memo[(i - 1) as usize] + memo.memo[(i - 2) as usize],);
     }
     memo.memo[n as usize]
 }
-
 
 #[cfg(test)]
 mod tests {

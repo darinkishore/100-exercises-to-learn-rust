@@ -1,21 +1,25 @@
 // TODO: Implement `Ticket::assigned_to` using `Option` as the return type.
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq,)]
 struct Ticket {
     title: String,
     description: String,
     status: Status,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq,)]
 enum Status {
     ToDo,
-    InProgress { assigned_to: String },
+    InProgress { assigned_to: String, },
     Done,
 }
 
 impl Ticket {
-    pub fn new(title: String, description: String, status: Status) -> Ticket {
+    pub fn new(
+        title: String,
+        description: String,
+        status: Status,
+    ) -> Ticket {
         if title.is_empty() {
             panic!("Title cannot be empty");
         }
@@ -35,9 +39,10 @@ impl Ticket {
             status,
         }
     }
-    pub fn assigned_to(&self) -> Option<&String> {
+
+    pub fn assigned_to(&self,) -> Option<&String,> {
         match &self.status {
-            Status::InProgress { assigned_to } => Some(&assigned_to),
+            Status::InProgress { assigned_to, } => Some(&assigned_to,),
             _ => None,
         }
     }
@@ -45,18 +50,21 @@ impl Ticket {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use common::{valid_description, valid_title};
+
+    use super::*;
 
     #[test]
     fn test_todo() {
-        let ticket = Ticket::new(valid_title(), valid_description(), Status::ToDo);
+        let ticket =
+            Ticket::new(valid_title(), valid_description(), Status::ToDo,);
         assert!(ticket.assigned_to().is_none());
     }
 
     #[test]
     fn test_done() {
-        let ticket = Ticket::new(valid_title(), valid_description(), Status::Done);
+        let ticket =
+            Ticket::new(valid_title(), valid_description(), Status::Done,);
         assert!(ticket.assigned_to().is_none());
     }
 

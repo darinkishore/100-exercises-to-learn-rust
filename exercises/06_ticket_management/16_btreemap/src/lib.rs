@@ -1,35 +1,33 @@
 // TODO: Replace `todo!()`s with the correct implementation.
-//  Implement `IntoIterator` for `&TicketStore`. The iterator should yield immutable
-//  references to the tickets, ordered by their `TicketId`.
+//  Implement `IntoIterator` for `&TicketStore`. The iterator should yield
+// immutable  references to the tickets, ordered by their `TicketId`.
 //  Implement additional traits on `TicketId` if needed.
 
-use btree_map::Values;
 use std::collections::btree_map::{IntoIter, Iter};
 use std::collections::{btree_map, BTreeMap};
 use std::ops::{Index, IndexMut};
+
+use btree_map::Values;
 use derive_more::IntoIterator;
 use ticket_fields::{TicketDescription, TicketTitle};
 
-#[derive(Clone)]
+#[derive(Clone,)]
 pub struct TicketStore {
-    tickets: BTreeMap<TicketId, Ticket>,
+    tickets: BTreeMap<TicketId, Ticket,>,
     counter: u64,
 }
 
-impl<'t> IntoIterator for &'t TicketStore {
+impl<'t,> IntoIterator for &'t TicketStore {
+    type IntoIter = Values<'t, TicketId, Ticket,>;
     type Item = &'t Ticket;
-    type IntoIter = Values<'t, TicketId, Ticket>;
 
-    fn into_iter(self) -> Self::IntoIter {
-        self.tickets.values()
-    }
+    fn into_iter(self,) -> Self::IntoIter { self.tickets.values() }
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, PartialOrd, Ord, Eq,)]
+pub struct TicketId(u64,);
 
-#[derive(Clone, Copy, Debug, PartialEq, PartialOrd, Ord, Eq)]
-pub struct TicketId(u64);
-
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq,)]
 pub struct Ticket {
     pub id: TicketId,
     pub title: TicketTitle,
@@ -37,13 +35,13 @@ pub struct Ticket {
     pub status: Status,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq,)]
 pub struct TicketDraft {
     pub title: TicketTitle,
     pub description: TicketDescription,
 }
 
-#[derive(Clone, Debug, Copy, PartialEq, Eq)]
+#[derive(Clone, Debug, Copy, PartialEq, Eq,)]
 pub enum Status {
     ToDo,
     InProgress,
@@ -58,8 +56,11 @@ impl TicketStore {
         }
     }
 
-    pub fn add_ticket(&mut self, ticket: TicketDraft) -> TicketId {
-        let id = TicketId(self.counter);
+    pub fn add_ticket(
+        &mut self,
+        ticket: TicketDraft,
+    ) -> TicketId {
+        let id = TicketId(self.counter,);
         self.counter += 1;
         let ticket = Ticket {
             id,
@@ -67,51 +68,70 @@ impl TicketStore {
             description: ticket.description,
             status: Status::ToDo,
         };
-        self.tickets.insert(id, ticket);
+        self.tickets.insert(id, ticket,);
         id
     }
 
-    pub fn get(&self, id: TicketId) -> Option<&Ticket> {
-        self.tickets.get(&id)
+    pub fn get(
+        &self,
+        id: TicketId,
+    ) -> Option<&Ticket,> {
+        self.tickets.get(&id,)
     }
 
-    pub fn get_mut(&mut self, id: TicketId) -> Option<&mut Ticket> {
-        self.tickets.get_mut(&id)
-    }
-}
-
-impl Index<TicketId> for TicketStore {
-    type Output = Ticket;
-
-    fn index(&self, index: TicketId) -> &Self::Output {
-        self.get(index).unwrap()
+    pub fn get_mut(
+        &mut self,
+        id: TicketId,
+    ) -> Option<&mut Ticket,> {
+        self.tickets.get_mut(&id,)
     }
 }
 
-impl Index<&TicketId> for TicketStore {
+impl Index<TicketId,> for TicketStore {
     type Output = Ticket;
 
-    fn index(&self, index: &TicketId) -> &Self::Output {
+    fn index(
+        &self,
+        index: TicketId,
+    ) -> &Self::Output {
+        self.get(index,).unwrap()
+    }
+}
+
+impl Index<&TicketId,> for TicketStore {
+    type Output = Ticket;
+
+    fn index(
+        &self,
+        index: &TicketId,
+    ) -> &Self::Output {
         &self[*index]
     }
 }
 
-impl IndexMut<TicketId> for TicketStore {
-    fn index_mut(&mut self, index: TicketId) -> &mut Self::Output {
-        self.get_mut(index).unwrap()
+impl IndexMut<TicketId,> for TicketStore {
+    fn index_mut(
+        &mut self,
+        index: TicketId,
+    ) -> &mut Self::Output {
+        self.get_mut(index,).unwrap()
     }
 }
 
-impl IndexMut<&TicketId> for TicketStore {
-    fn index_mut(&mut self, index: &TicketId) -> &mut Self::Output {
+impl IndexMut<&TicketId,> for TicketStore {
+    fn index_mut(
+        &mut self,
+        index: &TicketId,
+    ) -> &mut Self::Output {
         &mut self[*index]
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::{Status, TicketDraft, TicketId, TicketStore};
     use ticket_fields::test_helpers::{ticket_description, ticket_title};
+
+    use crate::{Status, TicketDraft, TicketId, TicketStore};
 
     #[test]
     fn works() {
@@ -124,7 +144,7 @@ mod tests {
                 title: ticket_title(),
                 description: ticket_description(),
             };
-            let id = store.add_ticket(draft.clone());
+            let id = store.add_ticket(draft.clone(),);
             let ticket = &store[id];
             assert_eq!(draft.title, ticket.title);
             assert_eq!(draft.description, ticket.description);
@@ -137,7 +157,7 @@ mod tests {
             assert_eq!(ticket.status, Status::InProgress);
         }
 
-        let ids: Vec<TicketId> = (&store).into_iter().map(|t| t.id).collect();
+        let ids: Vec<TicketId,> = (&store).into_iter().map(|t| t.id,).collect();
         let sorted_ids = {
             let mut v = ids.clone();
             v.sort();

@@ -1,5 +1,5 @@
 // Rewrite the factorial function using a `while` loop.
-pub fn factorial(n: u32) -> u32 {
+pub fn factorial(n: u32,) -> u32 {
     let mut output = 1;
     let mut i = 1;
     while i <= n {
@@ -7,7 +7,6 @@ pub fn factorial(n: u32) -> u32 {
         i = i + 1;
     }
     output
-
 }
 
 #[cfg(test)]

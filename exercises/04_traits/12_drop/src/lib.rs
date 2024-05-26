@@ -7,7 +7,7 @@ struct DropBomb {
 }
 
 impl Drop for DropBomb {
-    fn drop(&mut self) {
+    fn drop(&mut self,) {
         if self.live {
             panic!("OH NO!")
         }
@@ -15,14 +15,9 @@ impl Drop for DropBomb {
 }
 
 impl DropBomb {
-    fn new() -> Self {
-        DropBomb {
-            live: true,
-        }
-    }
-    fn defuse(&mut self) {
-        self.live = false;
-    }
+    fn new() -> Self { DropBomb { live: true, } }
+
+    fn defuse(&mut self,) { self.live = false; }
 }
 
 #[cfg(test)]

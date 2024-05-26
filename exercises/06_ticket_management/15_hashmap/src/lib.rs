@@ -3,18 +3,19 @@
 
 use std::collections::HashMap;
 use std::ops::{Index, IndexMut};
+
 use ticket_fields::{TicketDescription, TicketTitle};
 
-#[derive(Clone)]
+#[derive(Clone,)]
 pub struct TicketStore {
-    tickets: HashMap<TicketId, Ticket>,
+    tickets: HashMap<TicketId, Ticket,>,
     counter: u64,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
-pub struct TicketId(u64);
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash,)]
+pub struct TicketId(u64,);
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq,)]
 pub struct Ticket {
     pub id: TicketId,
     pub title: TicketTitle,
@@ -22,13 +23,13 @@ pub struct Ticket {
     pub status: Status,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq,)]
 pub struct TicketDraft {
     pub title: TicketTitle,
     pub description: TicketDescription,
 }
 
-#[derive(Clone, Debug, Copy, PartialEq, Eq)]
+#[derive(Clone, Debug, Copy, PartialEq, Eq,)]
 pub enum Status {
     ToDo,
     InProgress,
@@ -43,8 +44,11 @@ impl TicketStore {
         }
     }
 
-    pub fn add_ticket(&mut self, ticket: TicketDraft) -> TicketId {
-        let id = TicketId(self.counter);
+    pub fn add_ticket(
+        &mut self,
+        ticket: TicketDraft,
+    ) -> TicketId {
+        let id = TicketId(self.counter,);
         self.counter += 1;
         let ticket = Ticket {
             id,
@@ -52,51 +56,70 @@ impl TicketStore {
             description: ticket.description,
             status: Status::ToDo,
         };
-        self.tickets.insert(id, ticket);
+        self.tickets.insert(id, ticket,);
         id
     }
 
-    pub fn get(&self, id: TicketId) -> Option<&Ticket> {
-        self.tickets.get(&id)
+    pub fn get(
+        &self,
+        id: TicketId,
+    ) -> Option<&Ticket,> {
+        self.tickets.get(&id,)
     }
 
-    pub fn get_mut(&mut self, id: TicketId) -> Option<&mut Ticket> {
-        self.tickets.get_mut(&id)
-    }
-}
-
-impl Index<TicketId> for TicketStore {
-    type Output = Ticket;
-
-    fn index(&self, index: TicketId) -> &Self::Output {
-        self.get(index).unwrap()
+    pub fn get_mut(
+        &mut self,
+        id: TicketId,
+    ) -> Option<&mut Ticket,> {
+        self.tickets.get_mut(&id,)
     }
 }
 
-impl Index<&TicketId> for TicketStore {
+impl Index<TicketId,> for TicketStore {
     type Output = Ticket;
 
-    fn index(&self, index: &TicketId) -> &Self::Output {
+    fn index(
+        &self,
+        index: TicketId,
+    ) -> &Self::Output {
+        self.get(index,).unwrap()
+    }
+}
+
+impl Index<&TicketId,> for TicketStore {
+    type Output = Ticket;
+
+    fn index(
+        &self,
+        index: &TicketId,
+    ) -> &Self::Output {
         &self[*index]
     }
 }
 
-impl IndexMut<TicketId> for TicketStore {
-    fn index_mut(&mut self, index: TicketId) -> &mut Self::Output {
-        self.get_mut(index).unwrap()
+impl IndexMut<TicketId,> for TicketStore {
+    fn index_mut(
+        &mut self,
+        index: TicketId,
+    ) -> &mut Self::Output {
+        self.get_mut(index,).unwrap()
     }
 }
 
-impl IndexMut<&TicketId> for TicketStore {
-    fn index_mut(&mut self, index: &TicketId) -> &mut Self::Output {
+impl IndexMut<&TicketId,> for TicketStore {
+    fn index_mut(
+        &mut self,
+        index: &TicketId,
+    ) -> &mut Self::Output {
         &mut self[*index]
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::{Status, TicketDraft, TicketStore};
     use ticket_fields::test_helpers::{ticket_description, ticket_title};
+
+    use crate::{Status, TicketDraft, TicketStore};
 
     #[test]
     fn works() {
@@ -106,7 +129,7 @@ mod tests {
             title: ticket_title(),
             description: ticket_description(),
         };
-        let id = store.add_ticket(draft.clone());
+        let id = store.add_ticket(draft.clone(),);
         let ticket = &store[id];
         assert_eq!(draft.title, ticket.title);
         assert_eq!(draft.description, ticket.description);

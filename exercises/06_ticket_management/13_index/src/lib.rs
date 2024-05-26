@@ -1,34 +1,41 @@
 // TODO: Implement `Index<&TicketId>` and `Index<TicketId>` for `TicketStore`.
 
 use std::ops::Index;
+
 use ticket_fields::{TicketDescription, TicketTitle};
 
-#[derive(Clone)]
+#[derive(Clone,)]
 pub struct TicketStore {
-    tickets: Vec<Ticket>,
+    tickets: Vec<Ticket,>,
     counter: u64,
 }
 
-impl Index<TicketId> for TicketStore {
+impl Index<TicketId,> for TicketStore {
     type Output = Ticket;
 
-    fn index(&self, index: TicketId) -> &Self::Output {
+    fn index(
+        &self,
+        index: TicketId,
+    ) -> &Self::Output {
         &self.tickets[index.0 as usize]
     }
 }
 
-impl Index<&TicketId> for TicketStore {
+impl Index<&TicketId,> for TicketStore {
     type Output = Ticket;
 
-    fn index(&self, index: &TicketId) -> &Self::Output {
+    fn index(
+        &self,
+        index: &TicketId,
+    ) -> &Self::Output {
         &self.tickets[index.0 as usize]
     }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub struct TicketId(u64);
+#[derive(Clone, Copy, Debug, PartialEq,)]
+pub struct TicketId(u64,);
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq,)]
 pub struct Ticket {
     pub id: TicketId,
     pub title: TicketTitle,
@@ -36,13 +43,13 @@ pub struct Ticket {
     pub status: Status,
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq,)]
 pub struct TicketDraft {
     pub title: TicketTitle,
     pub description: TicketDescription,
 }
 
-#[derive(Clone, Debug, Copy, PartialEq)]
+#[derive(Clone, Debug, Copy, PartialEq,)]
 pub enum Status {
     ToDo,
     InProgress,
@@ -57,8 +64,11 @@ impl TicketStore {
         }
     }
 
-    pub fn add_ticket(&mut self, ticket: TicketDraft) -> TicketId {
-        let id = TicketId(self.counter);
+    pub fn add_ticket(
+        &mut self,
+        ticket: TicketDraft,
+    ) -> TicketId {
+        let id = TicketId(self.counter,);
         self.counter += 1;
         let ticket = Ticket {
             id,
@@ -66,19 +76,23 @@ impl TicketStore {
             description: ticket.description,
             status: Status::ToDo,
         };
-        self.tickets.push(ticket);
+        self.tickets.push(ticket,);
         id
     }
 
-    pub fn get(&self, id: TicketId) -> Option<&Ticket> {
-        self.tickets.iter().find(|&t| t.id == id)
+    pub fn get(
+        &self,
+        id: TicketId,
+    ) -> Option<&Ticket,> {
+        self.tickets.iter().find(|&t| t.id == id,)
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::{Status, TicketDraft, TicketStore};
     use ticket_fields::test_helpers::{ticket_description, ticket_title};
+
+    use crate::{Status, TicketDraft, TicketStore};
 
     #[test]
     fn works() {
@@ -88,7 +102,7 @@ mod tests {
             title: ticket_title(),
             description: ticket_description(),
         };
-        let id1 = store.add_ticket(draft1.clone());
+        let id1 = store.add_ticket(draft1.clone(),);
         let ticket1 = &store[id1];
         assert_eq!(draft1.title, ticket1.title);
         assert_eq!(draft1.description, ticket1.description);
@@ -98,7 +112,7 @@ mod tests {
             title: ticket_title(),
             description: ticket_description(),
         };
-        let id2 = store.add_ticket(draft2);
+        let id2 = store.add_ticket(draft2,);
         let ticket2 = &store[&id2];
 
         assert_ne!(id1, id2);

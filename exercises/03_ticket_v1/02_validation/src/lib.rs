@@ -16,23 +16,35 @@ impl Ticket {
     //  The method should panic if any of the requirements are not met.
     //
     // You'll have to use what you learned in the previous exercises,
-    // as well as some `String` methods. Use the documentation of Rust's standard library
-    // to find the most appropriate options -> https://doc.rust-lang.org/std/string/struct.String.html
-    fn new(title: String, description: String, status: String) -> Self {
-
+    // as well as some `String` methods. Use the documentation of Rust's
+    // standard library to find the most appropriate options -> https://doc.rust-lang.org/std/string/struct.String.html
+    fn new(
+        title: String,
+        description: String,
+        status: String,
+    ) -> Self {
         // - Only `To-Do`, `In Progress`, and `Done` statuses are allowed
-        if !(status.contains("To-Do") || status.contains("In Progress") || status.contains("Done")) {
-            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+        if !(status.contains("To-Do",)
+            || status.contains("In Progress",)
+            || status.contains("Done",))
+        {
+            panic!(
+                "Only `To-Do`, `In Progress`, and `Done` statuses are allowed"
+            );
         }
 
         // - The `title` and `description` fields should not be empty.
         assert!(!title.is_empty(), "Title cannot be empty");
         assert!(!description.is_empty(), "Description cannot be empty");
 
-
-        assert!(title.len() <= 50, "Title cannot be longer than 50 characters");
-        assert!(description.len() <= 500, "Description cannot be longer than 500 characters");
-
+        assert!(
+            title.len() <= 50,
+            "Title cannot be longer than 50 characters"
+        );
+        assert!(
+            description.len() <= 500,
+            "Description cannot be longer than 500 characters"
+        );
 
         Self {
             title,
@@ -44,46 +56,54 @@ impl Ticket {
 
 #[cfg(test)]
 mod tests {
+    use common::{
+        overly_long_description, overly_long_title, valid_description,
+        valid_title,
+    };
+
     use super::*;
-    use common::{overly_long_description, overly_long_title, valid_description, valid_title};
 
     #[test]
     #[should_panic(expected = "Title cannot be empty")]
     fn title_cannot_be_empty() {
-        Ticket::new("".into(), valid_description(), "To-Do".into());
+        Ticket::new("".into(), valid_description(), "To-Do".into(),);
     }
 
     #[test]
     #[should_panic(expected = "Description cannot be empty")]
     fn description_cannot_be_empty() {
-        Ticket::new(valid_title(), "".into(), "To-Do".into());
+        Ticket::new(valid_title(), "".into(), "To-Do".into(),);
     }
 
     #[test]
     #[should_panic(expected = "Title cannot be longer than 50 characters")]
     fn title_cannot_be_longer_than_fifty_chars() {
-        Ticket::new(overly_long_title(), valid_description(), "To-Do".into());
+        Ticket::new(overly_long_title(), valid_description(), "To-Do".into(),);
     }
 
     #[test]
-    #[should_panic(expected = "Description cannot be longer than 500 characters")]
+    #[should_panic(
+        expected = "Description cannot be longer than 500 characters"
+    )]
     fn description_cannot_be_longer_than_500_chars() {
-        Ticket::new(valid_title(), overly_long_description(), "To-Do".into());
+        Ticket::new(valid_title(), overly_long_description(), "To-Do".into(),);
     }
 
     #[test]
-    #[should_panic(expected = "Only `To-Do`, `In Progress`, and `Done` statuses are allowed")]
+    #[should_panic(
+        expected = "Only `To-Do`, `In Progress`, and `Done` statuses are allowed"
+    )]
     fn status_must_be_valid() {
-        Ticket::new(valid_title(), valid_description(), "Funny".into());
+        Ticket::new(valid_title(), valid_description(), "Funny".into(),);
     }
 
     #[test]
     fn done_is_allowed() {
-        Ticket::new(valid_title(), valid_description(), "Done".into());
+        Ticket::new(valid_title(), valid_description(), "Done".into(),);
     }
 
     #[test]
     fn in_progress_is_allowed() {
-        Ticket::new(valid_title(), valid_description(), "In Progress".into());
+        Ticket::new(valid_title(), valid_description(), "In Progress".into(),);
     }
 }

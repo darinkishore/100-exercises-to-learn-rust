@@ -1,10 +1,13 @@
 mod helpers {
-    // TODO: Make this code compile, either by adding a `use` statement or by using
-    //  the appropriate path to refer to the `Ticket` struct.
+    // TODO: Make this code compile, either by adding a `use` statement or by
+    // using  the appropriate path to refer to the `Ticket` struct.
     use crate::Ticket;
 
-    fn create_todo_ticket(title: String, description: String) -> Ticket {
-        Ticket::new(title, description, "To-Do".into())
+    fn create_todo_ticket(
+        title: String,
+        description: String,
+    ) -> Ticket {
+        Ticket::new(title, description, "To-Do".into(),)
     }
 }
 
@@ -15,7 +18,11 @@ struct Ticket {
 }
 
 impl Ticket {
-    fn new(title: String, description: String, status: String) -> Ticket {
+    fn new(
+        title: String,
+        description: String,
+        status: String,
+    ) -> Ticket {
         if title.is_empty() {
             panic!("Title cannot be empty");
         }
@@ -29,7 +36,9 @@ impl Ticket {
             panic!("Description cannot be longer than 500 characters");
         }
         if status != "To-Do" && status != "In Progress" && status != "Done" {
-            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+            panic!(
+                "Only `To-Do`, `In Progress`, and `Done` statuses are allowed"
+            );
         }
 
         Ticket {

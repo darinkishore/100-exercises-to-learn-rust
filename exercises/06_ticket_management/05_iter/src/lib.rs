@@ -2,19 +2,19 @@ use derive_more::IntoIterator;
 use ticket_fields::{TicketDescription, TicketTitle};
 
 // TODO: Provide an `iter` method that returns an iterator over `&Ticket` items.
-#[derive(Clone, IntoIterator)]
+#[derive(Clone, IntoIterator,)]
 pub struct TicketStore {
-    tickets: Vec<Ticket>,
+    tickets: Vec<Ticket,>,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq,)]
 pub struct Ticket {
     title: TicketTitle,
     description: TicketDescription,
     status: Status,
 }
 
-#[derive(Clone, Debug, Copy, PartialEq)]
+#[derive(Clone, Debug, Copy, PartialEq,)]
 pub enum Status {
     ToDo,
     InProgress,
@@ -28,20 +28,23 @@ impl TicketStore {
         }
     }
 
-    pub fn iter(&self) -> impl Iterator<Item=&Ticket> {
+    pub fn iter(&self,) -> impl Iterator<Item = &Ticket,> {
         self.tickets.iter()
     }
 
-
-    pub fn add_ticket(&mut self, ticket: Ticket) {
-        self.tickets.push(ticket);
+    pub fn add_ticket(
+        &mut self,
+        ticket: Ticket,
+    ) {
+        self.tickets.push(ticket,);
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use ticket_fields::test_helpers::{ticket_description, ticket_title};
+
+    use super::*;
 
     #[test]
     fn add_ticket() {
@@ -52,17 +55,17 @@ mod tests {
             description: ticket_description(),
             status: Status::ToDo,
         };
-        store.add_ticket(ticket);
+        store.add_ticket(ticket,);
 
         let ticket = Ticket {
             title: ticket_title(),
             description: ticket_description(),
             status: Status::InProgress,
         };
-        store.add_ticket(ticket);
+        store.add_ticket(ticket,);
 
-        let tickets: Vec<&Ticket> = store.iter().collect();
-        let tickets2: Vec<&Ticket> = store.iter().collect();
+        let tickets: Vec<&Ticket,> = store.iter().collect();
+        let tickets2: Vec<&Ticket,> = store.iter().collect();
         assert_eq!(tickets, tickets2);
     }
 }

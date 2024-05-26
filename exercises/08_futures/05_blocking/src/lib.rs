@@ -3,36 +3,46 @@
 //  deadlock between the caller and the server.
 //  Use `spawn_blocking` inside `echo` to resolve the issue.
 use std::io::{Read, Write};
-use tokio::net::TcpListener;
 
-pub async fn echo(listener: TcpListener) -> Result<(), anyhow::Error> {
+use tokio::net::TcpListener;
+use tokio::task;
+
+pub async fn echo(listener: TcpListener) -> Result<(), anyhow::Error, > {
     loop {
-        let (socket, _) = listener.accept().await?;
+        let (socket, _, ) = listener.accept().await?;
         let mut socket = socket.into_std()?;
         socket.set_nonblocking(false)?;
         let mut buffer = Vec::new();
-        socket.read_to_end(&mut buffer)?;
-        socket.write_all(&buffer)?;
+        let handle = task::spawn_blocking(move || {
+            socket.read_to_end(&mut buffer).unwrap();
+            socket.write_all(&buffer).unwrap();
+        });
+        tokio::task::yield_now().await;
+        if let Err(e) = handle.await {
+            eprintln!("Error in blocking task: {}", e);
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::net::SocketAddr;
     use std::panic;
+
     use tokio::io::{AsyncReadExt, AsyncWriteExt};
     use tokio::task::JoinSet;
 
-    async fn bind_random() -> (TcpListener, SocketAddr) {
+    use super::*;
+
+    async fn bind_random() -> (TcpListener, SocketAddr, ) {
         let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
         let addr = listener.local_addr().unwrap();
-        (listener, addr)
+        (listener, addr, )
     }
 
     #[tokio::test]
     async fn test_echo() {
-        let (listener, addr) = bind_random().await;
+        let (listener, addr, ) = bind_random().await;
         tokio::spawn(echo(listener));
 
         let requests = vec![
@@ -45,8 +55,9 @@ mod tests {
 
         for request in requests {
             join_set.spawn(async move {
-                let mut socket = tokio::net::TcpStream::connect(addr).await.unwrap();
-                let (mut reader, mut writer) = socket.split();
+                let mut socket =
+                    tokio::net::TcpStream::connect(addr).await.unwrap();
+                let (mut reader, mut writer, ) = socket.split();
 
                 // Send the request
                 writer.write_all(request.as_bytes()).await.unwrap();
@@ -57,12 +68,12 @@ mod tests {
                 let mut buf = Vec::with_capacity(request.len());
                 reader.read_to_end(&mut buf).await.unwrap();
                 assert_eq!(&buf, request.as_bytes());
-            });
+            }, );
         }
 
-        while let Some(outcome) = join_set.join_next().await {
-            if let Err(e) = outcome {
-                if let Ok(reason) = e.try_into_panic() {
+        while let Some(outcome, ) = join_set.join_next().await {
+            if let Err(e, ) = outcome {
+                if let Ok(reason, ) = e.try_into_panic() {
                     panic::resume_unwind(reason);
                 }
             }
